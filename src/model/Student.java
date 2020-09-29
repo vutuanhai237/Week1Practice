@@ -40,7 +40,7 @@ public class Student {
 	public double getGPA() {
 		double gpa = 0;
 		for (Score score : this.scores) {
-			gpa += score.getScore();
+			gpa += score.getPoint();
 		}
 		return gpa / this.scores.size();
 	}

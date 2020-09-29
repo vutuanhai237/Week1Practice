@@ -65,7 +65,7 @@
 			scores = listStudent["students"][i]["scores"];
 			for (j = 4; j < 4 + scores.length; j++) {
 				var cellScore = row.insertCell(j);
-				cellScore.innerHTML = scores[j-4].score;
+				cellScore.innerHTML = scores[j-4].point;
 			}
 		}
 		// show header of table

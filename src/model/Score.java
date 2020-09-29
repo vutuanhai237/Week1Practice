@@ -2,11 +2,11 @@ package model;
 
 public class Score {
 	private String name;
-	private double score;
+	private double point;
 
-	public Score(String name, double score) {
+	public Score(String name, double point) {
 		this.name = name;
-		this.score = score;
+		this.point = point;
 	}
 
 	public String getName() {
@@ -17,15 +17,15 @@ public class Score {
 		this.name = name;
 	}
 
-	public double getScore() {
-		return score;
+	public double getPoint() {
+		return this.point;
 	}
 
-	public void setScore(double score) {
-		this.score = score;
+	public void setPoint(double score) {
+		this.point = score;
 	}
 
 	public String getString() {
-		return this.name + ": " + this.score;
+		return this.name + ": " + this.point;
 	}
 }
