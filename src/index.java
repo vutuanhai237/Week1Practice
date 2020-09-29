@@ -1,4 +1,3 @@
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,49 +8,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import model.ListStudent;
+import model.Score;
 import model.Student;
 
 @WebServlet(description = "handle for index.jsp", urlPatterns = { "/index" })
 public class index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public ArrayList<Student> students = new ArrayList<Student>();
-	public Student smartestStudent, stupidStudent;
+	public ListStudent listStudent;
 
 	public index() {
 		super();
 		// Initialize some example
-		students.add(new Student("Hai1", 9.0, 9.0, 10.0));
-		students.add(new Student("Hai2", 9.0, 9.0, 10.0));
-		students.add(new Student("Hai3", 1.0, 9.0, 10.0));
-		students.add(new Student("Hai4", 10.0, 10.0, 10.0));
+		Score math = new Score("math", 5.0);
+		Score english = new Score("english", 9.0);
+		Score physical = new Score("physical", 9.0);
+		ArrayList<Score> scores = new ArrayList<Score>();
+		scores.add(math);
+		scores.add(english);
+		scores.add(physical);
+		Student s = new Student("Hai1", 18, "12C1", "Gia Lai", scores);
+		Student s2 = new Student("Hai2", 18, "12C1", "Gia Lai", scores);
+		listStudent = new ListStudent();
+		listStudent.add(s);
+		listStudent.add(s2);
+		listStudent.getSmartestStudent();
+		listStudent.getStupidStudent();
 	}
 
-	public Student findSmartestStudent() {
-		smartestStudent = students.get(0);
-		for (int i = 0; i < students.size(); i++) {
-			if (students.get(i).getGPA() > smartestStudent.getGPA()) {
-				smartestStudent = students.get(i);
-			}
-		}
-		return smartestStudent;
-	}
-
-	public Student findStupidStudent() {
-		stupidStudent = students.get(0);
-		for (int i = 0; i < students.size(); i++) {
-			if (students.get(i).getGPA() < stupidStudent.getGPA()) {
-				stupidStudent = students.get(i);
-			}
-		}
-		return stupidStudent;
+	public String validateStudents() {
+		String listStudentJSON = new Gson().toJson(this.listStudent);
+		return listStudentJSON;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Fetching data
-		request.setAttribute("students", students);
-		request.setAttribute("smartestStudent", this.findSmartestStudent());
-		request.setAttribute("stupidStudent", this.findStupidStudent());
+		request.setAttribute("listStudent", String.valueOf(this.validateStudents()));
+		request.setAttribute("number", String.valueOf(1));
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
@@ -59,14 +55,44 @@ public class index extends HttpServlet {
 			throws ServletException, IOException {
 		// Add new student
 		String name = request.getParameter("studentNameInput");
+		int age = Integer.parseInt(request.getParameter("studentAgeInput"));
+		String classes = request.getParameter("studentClassesInput");
+		String province = request.getParameter("studentProvinceInput");
 		double mathScore = Double.parseDouble(request.getParameter("mathScoreInput"));
 		double englishScore = Double.parseDouble(request.getParameter("englishScoreInput"));
 		double physicalScore = Double.parseDouble(request.getParameter("physicalScoreInput"));
-		students.add(new Student(name, mathScore, englishScore, physicalScore));
 		try (PrintWriter out = response.getWriter()) {
-			out.print(students.get(students.size() - 1).getName());
-			out.print(" is added successfully!");
+			String message = regexAddNewStudent(name, age, classes, province, mathScore, englishScore, physicalScore);
+			if (message == "valid") {
+				out.print(name + " is added successfully!");
+				ArrayList<Score> newScores = new ArrayList<Score>();
+				newScores.add(new Score("math", mathScore));
+				newScores.add(new Score("english", englishScore));
+				newScores.add(new Score("physical", physicalScore));
+				listStudent.add(new Student(name, age, classes, province, newScores));
+			} else {
+				out.print(message + ", please try again!");
+			}
 		}
 	}
 
+	public String regexAddNewStudent(String name, int age, String classes, String province, double mathScore,
+			double englishScore, double physicalScore) {
+		String message = "valid";
+		if (name.length() > 30) {
+			message = "Name was tool long!";
+		} else if (age < 0 || age > 100) {
+			message = "Age is not valid";
+		} else if (classes.length() < 1 || classes.length() > 10) {
+			message = "Class 's name is not valid";
+		} else if (mathScore < 0 || mathScore > 10) {
+			message = "Math score is not valid";
+		} else if (englishScore < 0 || englishScore > 10) {
+			message = "English score is not valid";
+		} else if (physicalScore < 0 || physicalScore > 10) {
+			message = "Physical score is not valid";
+		}
+
+		return message;
+	}
 }

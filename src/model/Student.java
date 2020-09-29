@@ -1,27 +1,32 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Student {
 	private String name;
-	private double mathScore;
-	private double englishScore;
-	private double physicalScore;
+	private int age;
+	private String classes;
+	private String province;
+	private ArrayList<Score> scores;
 	@SuppressWarnings("unused")
 	private double GPA;
 
 	public Student() {
 		this.name = "";
-		this.mathScore = 0.0;
-		this.englishScore = 0.0;
-		this.physicalScore = 0.0;
+		this.age = 0;
+		this.classes = "";
+		this.province = "";
+		this.scores = null;
 		this.GPA = 0.0;
 	}
 
-	public Student(String name, Double mathScore, Double englishScore, Double physicalScore) {
+	public Student(String name, int age, String classes, String province, ArrayList<Score> scores) {
 		this.name = name;
-		this.mathScore = mathScore;
-		this.englishScore = englishScore;
-		this.physicalScore = physicalScore;
-
+		this.age = age;
+		this.classes = classes;
+		this.province = province;
+		this.scores = scores;
+		this.GPA = 0.0;
 	}
 
 	public String getName() {
@@ -32,35 +37,55 @@ public class Student {
 		this.name = name;
 	}
 
-	public double getMathScore() {
-		return mathScore;
-	}
-
-	public void setMathScore(Double mathScore) {
-		this.mathScore = mathScore;
-	}
-
-	public double getEnglishScore() {
-		return englishScore;
-	}
-
-	public void setEnglishScore(Double englishScore) {
-		this.englishScore = englishScore;
-	}
-
-	public double getPhysicalScore() {
-		return physicalScore;
-	}
-
-	public void setPhysicalScore(Double physicalScore) {
-		this.physicalScore = physicalScore;
-	}
-
 	public double getGPA() {
-		return (double) Math.round((this.mathScore + this.englishScore + this.physicalScore) / 3);
+		double gpa = 0;
+		for (Score score : this.scores) {
+			gpa += score.getScore();
+		}
+		return gpa / this.scores.size();
 	}
 
-	public void setGPA(Double GPA) {
+	public void setGPA(double GPA) {
 		this.GPA = GPA;
+	}
+
+	public ArrayList<Score> getScores() {
+		return scores;
+	}
+
+	public void setScores(ArrayList<Score> scores) {
+		this.scores = scores;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getClasses() {
+		return classes;
+	}
+
+	public void setClasses(String classes) {
+		this.classes = classes;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getString() {
+		String scoreStrings = "";
+		for (Score score : this.scores) {
+			scoreStrings += score.getString() + "\n";
+		}
+		return "Học sinh " + this.name + " (" + this.age + ", " + this.classes + ")" + "\n" + scoreStrings;
 	}
 }
