@@ -8,27 +8,24 @@ public class ListStudent {
 	private Student smartestStudent;
 
 	public ListStudent() {
-		this.students = null;
-		this.smartestStudent = null;
-		this.stupidStudent = null;
+		this.students = new ArrayList<Student>();
+		this.smartestStudent = new Student();
+		this.stupidStudent = new Student();
 	}
 
-	public void add(Student student) {
-		if (this.students == null) {
-			this.students = new ArrayList<Student>();
-		}
+	public void addStudent(Student student) {
 		this.students.add(student);
 		this.smartestStudent = this.getSmartestStudent();
 		this.stupidStudent = this.getStupidStudent();
-		System.out.print(this.stupidStudent.getName());
 	}
 
 	public ListStudent(ArrayList<Student> students) {
 		this.students = students;
-		// this.smartestStudent = this.getSmartestStudent();
-		// this.stupidStudent = this.getStupidStudent();
+		this.smartestStudent = this.getSmartestStudent();
+		this.stupidStudent = this.getStupidStudent();
 	}
 
+	// find student who has max GPA
 	public Student getSmartestStudent() {
 		this.smartestStudent = this.students.get(0);
 		for (int i = 0; i < this.students.size(); i++) {
@@ -44,6 +41,7 @@ public class ListStudent {
 		this.smartestStudent = smartestStudent;
 	}
 
+	// find student who has minimum GPA
 	public Student getStupidStudent() {
 		this.stupidStudent = this.students.get(0);
 		for (int i = 0; i < this.students.size(); i++) {

@@ -16,7 +16,7 @@ public class Student {
 		this.age = 0;
 		this.classes = "";
 		this.province = "";
-		this.scores = null;
+		this.scores = new ArrayList<Score>();
 		this.GPA = 0.0;
 	}
 
@@ -26,7 +26,7 @@ public class Student {
 		this.classes = classes;
 		this.province = province;
 		this.scores = scores;
-		this.GPA = 0.0;
+		this.GPA = this.getGPA();
 	}
 
 	public String getName() {
@@ -81,14 +81,4 @@ public class Student {
 		this.province = province;
 	}
 
-	//Cuong Comments
-	//I think it should return Json string all info of student
-	//Using English if possible :D
-	public String getString() {
-		String scoreStrings = "";
-		for (Score score : this.scores) {
-			scoreStrings += score.getString() + "\n";
-		}
-		return "Học sinh " + this.name + " (" + this.age + ", " + this.classes + ")" + "\n" + scoreStrings;
-	}
 }
