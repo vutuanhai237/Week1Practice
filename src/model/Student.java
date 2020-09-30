@@ -81,6 +81,9 @@ public class Student {
 		this.province = province;
 	}
 
+	//Cuong Comments
+	//I think it should return Json string all info of student
+	//Using English if possible :D
 	public String getString() {
 		String scoreStrings = "";
 		for (Score score : this.scores) {

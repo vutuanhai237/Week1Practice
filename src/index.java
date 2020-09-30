@@ -18,6 +18,10 @@ import model.Student;
 public class index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public ListStudent listStudent;
+	
+	//Cuong Comments
+	//Can you add configuration into .gitignore to ignore generated files when building (class, jar ...)
+	//We don't need it or don't commit those files
 
 	public index() {
 		super();
@@ -34,19 +38,32 @@ public class index extends HttpServlet {
 		listStudent = new ListStudent();
 		listStudent.add(s);
 		listStudent.add(s2);
+		//Cuong Comments
+		//Can you put these functions in to service package
+		//In service package we will do business logic.
+		//If a function which is used many times you can put it into Utils package
+		//function getSmartestStudent(listStudent){}
+		//Same for getStupidStudent
 		listStudent.getSmartestStudent();
 		listStudent.getStupidStudent();
 	}
 
+	//Cuong Comments
+	//Change this function to parsingToJson()
+	//Can you help to add java doc for each function if possible
 	public String validateStudents() {
 		String listStudentJSON = new Gson().toJson(this.listStudent);
 		return listStudentJSON;
 	}
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Fetching data
 		request.setAttribute("listStudent", String.valueOf(this.validateStudents()));
+		
+		//Cuong Comments
+		//Is this redundant code?
 		request.setAttribute("number", String.valueOf(1));
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
@@ -76,6 +93,8 @@ public class index extends HttpServlet {
 		}
 	}
 
+	//Cuong Comments
+	//validate function should be put into service package too :)
 	public String regexAddNewStudent(String name, int age, String classes, String province, double mathScore,
 			double englishScore, double physicalScore) {
 		String message = "valid";
