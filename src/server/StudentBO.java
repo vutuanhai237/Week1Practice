@@ -2,11 +2,16 @@ package server;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import model.ListStudent;
 import model.Score;
 import model.Student;
 
 public class StudentBO {
+	private static Logger LOGGER = LogManager.getLogger(ListStudent.class);
+
 	public static ListStudent getSampleStudent() {
 		Score math = new Score("math", 5.0);
 		Score english = new Score("english", 9.0);
@@ -20,6 +25,8 @@ public class StudentBO {
 		ListStudent listStudent = new ListStudent();
 		listStudent.addStudent(student1);
 		listStudent.addStudent(student2);
+
+		LOGGER.info("Get smaple student successfully");
 		return listStudent;
 	}
 

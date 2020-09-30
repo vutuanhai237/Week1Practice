@@ -6,9 +6,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 
+import model.ListStudent;
+
 public class Utils {
+	private static Logger LOGGER = LogManager.getLogger(ListStudent.class);
+
 	public static class JDBCUtils {
 		private static String jdbcURL = "jdbc:mysql://localhost:3306/demo";
 		private static String jdbcUsername = "root";
@@ -27,9 +34,11 @@ public class Utils {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				LOGGER.info("Connect databse successfully");
 			} catch (SQLException e) {
-				e.printStackTrace();
+				printSQLException(e);
 			} catch (ClassNotFoundException e) {
+				LOGGER.error("JDBC not fould, conect database falled");
 				e.printStackTrace();
 			}
 			return connection;
@@ -38,13 +47,14 @@ public class Utils {
 		public static void printSQLException(SQLException ex) {
 			for (Throwable e : ex) {
 				if (e instanceof SQLException) {
+					LOGGER.error("Conect database falled");
+					LOGGER.error("SQLState: " + ((SQLException) e).getSQLState());
+					LOGGER.error("Error Code: " + ((SQLException) e).getErrorCode());
+					LOGGER.error("Message: " + e.getMessage());
 					e.printStackTrace(System.err);
-					System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-					System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-					System.err.println("Message: " + e.getMessage());
 					Throwable t = ex.getCause();
 					while (t != null) {
-						System.out.println("Cause: " + t);
+						LOGGER.error("Cause: " + t);
 						t = t.getCause();
 					}
 				}

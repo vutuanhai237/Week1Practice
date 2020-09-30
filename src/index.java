@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import model.ListStudent;
 import model.Score;
 import model.Student;
@@ -18,6 +21,7 @@ import utils.Utils.JSONUtils;
 public class index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public ListStudent listStudent = new ListStudent();
+	private static Logger LOGGER = LogManager.getLogger(ListStudent.class);
 
 	// Initialize some example
 	public index() {
@@ -30,6 +34,7 @@ public class index extends HttpServlet {
 			throws ServletException, IOException {
 		request.setAttribute("listStudent", String.valueOf(JSONUtils.getJSON(this.listStudent)));
 		request.getRequestDispatcher("index.jsp").forward(request, response);
+		LOGGER.info("Get list student successfully");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,14 +51,16 @@ public class index extends HttpServlet {
 			String message = StudentBO.checkStudent(name, age, classes, province, mathScore, englishScore,
 					physicalScore);
 			if (message == "valid") {
-				out.print(name + " is added successfully!");
 				ArrayList<Score> newScores = new ArrayList<Score>();
 				newScores.add(new Score("math", mathScore));
 				newScores.add(new Score("english", englishScore));
 				newScores.add(new Score("physical", physicalScore));
 				listStudent.addStudent(new Student(name, age, classes, province, newScores));
+				out.println(name + " is added successfully");
+				LOGGER.info(name + " is added successfully");
 			} else {
-				out.print(message + ", please try again!");
+				out.println(message + ", please try again!");
+				LOGGER.error(message + ", please try again!");
 			}
 		}
 	}
